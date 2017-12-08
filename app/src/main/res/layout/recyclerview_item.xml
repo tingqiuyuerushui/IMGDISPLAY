@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/main_simple_drawee_view"
+        fresco:retryImageScaleType="fitCenter"
+        fresco:roundingBorderWidth="2dp"
+        fresco:roundingBorderColor="@color/colorPrimary"
+        fresco:placeholderImage="@mipmap/ic_launcher"/>
+</android.support.constraint.ConstraintLayout>
