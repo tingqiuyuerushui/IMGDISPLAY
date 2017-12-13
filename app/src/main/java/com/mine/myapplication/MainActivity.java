@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.mine.myapplication.activity.BaseActivity;
@@ -15,6 +17,7 @@ import com.mine.myapplication.net.DefaultObserver;
 import com.mine.myapplication.net.IdeaApi;
 import com.mine.myapplication.net.MyBasicResponse;
 import com.mine.myapplication.special.SpacesItemDecoration;
+import com.mine.myapplication.utils.MySharedData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ public class MainActivity extends BaseActivity {
     private List<ImgListPageEntity.ListImgPageInfoBean.ContentBean> imgListUrl;
     private int pagenum = 0;
     private int pagesize = 12;
+    private int totalpage = 12;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -52,6 +56,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
+        pagenum = MySharedData.sharedata_ReadInt(context,"pagenum");
         getData(pagenum,pagesize);
         swiperefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -60,6 +65,7 @@ public class MainActivity extends BaseActivity {
                 swiperefreshLayout.setRefreshing(false);
             }
         });
+
     }
 
     private void initRecyclerView(){
@@ -91,17 +97,18 @@ public class MainActivity extends BaseActivity {
                         }else{
                             imgListUrl.clear();
                         }
+                        totalpage = response.getListImgPageInfo().getTotalPages();
                         urlArray = new ArrayList<>();
                         for (int i = 0; i < response.getListImgPageInfo().getContent().size(); i++) {
                             imgListUrl.add(response.getListImgPageInfo().getContent().get(i));
                             urlArray.add(response.getListImgPageInfo().getContent().get(i).getImg_url());
                         }
-
+                        MySharedData.sharedata_WriteInt(context,"pagenum",pagenum);
                         pagenum ++;
                         if (imgListAdapter == null){
                             imgListAdapter = new ImgListAdapter(context,imgListUrl);
                             recyclerView.setAdapter(imgListAdapter);
-                            imgListAdapter.getRandomHeight(imgListUrl);
+//                            imgListAdapter.getRandomHeight(imgListUrl);
                             imgListAdapter.setItemOnClickListener(new MyItemOnClickListener() {
                                 @Override
                                 public void onItemOnClick(View view, int postion) {
@@ -115,5 +122,27 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return  true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btn_home:
+                pagenum = 0;
+                getData(pagenum,pagesize);
+//                Toast.makeText(this,"first",Toast.LENGTH_LONG).show();
+                break;
+            case R.id.btn_page_goto:
+                pagenum = (int)(0+Math.random()*totalpage);
+                getData(pagenum,pagesize);
+//                Toast.makeText(this,"second", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -36,16 +36,26 @@ public class ImgListAdapter extends RecyclerView.Adapter<ImgListAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ViewGroup.LayoutParams layoutParams = holder.mainSimpleDraweeView.getLayoutParams();
-        layoutParams.height = mHeights.get(position);
-        holder.itemView.setLayoutParams(layoutParams);
+//        ViewGroup.LayoutParams layoutParams = holder.mainSimpleDraweeView.getLayoutParams();
+//        layoutParams.height = mHeights.get(position);
+//        holder.itemView.setLayoutParams(layoutParams);
         if (listDate!=null){
             Uri uri =  Uri.parse(listDate.get(position).getImg_url());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                    .setProgressiveRenderingEnabled(true)
+                    .build();
             DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setUri(uri)
+                    .setImageRequest(request)
                     .setAutoPlayAnimations(true)
+                    .setOldController(holder.mainSimpleDraweeView.getController())
                     .build();
             holder.mainSimpleDraweeView.setController(controller);
+//            DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                    .setUri(uri)
+//                    .setAutoPlayAnimations(true)
+//                    .setOldController(holder.mainSimpleDraweeView.getController())
+//                    .build();
+//            holder.mainSimpleDraweeView.setController(controller);
         }
     }
 
@@ -80,7 +90,7 @@ public class ImgListAdapter extends RecyclerView.Adapter<ImgListAdapter.ViewHold
     public void getRandomHeight(List<ImgListPageEntity.ListImgPageInfoBean.ContentBean> mList){
         mHeights = new ArrayList<>();
         for(int i=0; i < mList.size();i++){
-            //随机的获取一个范围为200-600直接的高度
+            //随机的获取一个范围为300-700直接的高度
             mHeights.add((int)(300+Math.random()*400));
         }
     }
