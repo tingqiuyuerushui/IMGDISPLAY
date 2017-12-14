@@ -7,4 +7,7 @@
     <string name="parse_error">解析服务器响应数据失败</string>
     <string name="unknown_error">未知错误</string>
     <string name="response_return_error">服务器返回数据失败</string>
+    <string name="title_image">图片</string>
+    <string name="title_video">视频</string>
+    <string name="title_user">用户</string>
 </resources>
