@@ -2,6 +2,7 @@ package com.mine.myapplication.net;
 
 import com.mine.myapplication.entity.ImgListEntity;
 import com.mine.myapplication.entity.ImgListPageEntity;
+import com.mine.myapplication.entity.VideoListEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ public interface IdeaApiService {
 
     @GET("imginfo/imglistpage")
     Observable<MyBasicResponse<ImgListPageEntity.ListImgPageInfoBean>> getImgListPage(@Query("page") int page,@Query("size") int size);
+    @GET("video/videolist")
+    Observable<MyBasicResponse<VideoListEntity>> getVideoListPage(@Query("page") int page, @Query("size") int size);
 
     /**
      * @param page

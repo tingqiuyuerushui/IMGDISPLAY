@@ -10,18 +10,24 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.mine.myapplication.activity.BaseActivity;
 import com.mine.myapplication.fragment.FragmentTabAdapter;
 import com.mine.myapplication.fragment.ImgFragment;
 import com.mine.myapplication.fragment.UserFragment;
 import com.mine.myapplication.fragment.VideoFragment;
+import com.mine.myapplication.utils.LogUtils;
+import com.mine.myapplication.utils.SDUIUtil;
+import com.mine.myapplication.utils.Utils;
 import com.trello.rxlifecycle2.components.RxFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
  * Created by lun.zhang on 12/13/2017.
@@ -41,6 +47,8 @@ public class TabMainActivity extends BaseActivity {
     public static final int IMGFRAGMENT = 0;
     public static final int VIDEORAGMENT = 1;
     public static final int USERFRAGMENT = 2;
+    private int navigationHeigth = 0;
+    private int fragmentHeigth = 0;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -72,6 +80,29 @@ public class TabMainActivity extends BaseActivity {
     }
 
     private void initView() {
+        //获取底部导航的高度 让fragment的高度-底部导航高度获得fragment的能正常显示高度
+        ViewTreeObserver vtoNavigation = navigation.getViewTreeObserver();
+        vtoNavigation.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                navigation.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                navigationHeigth =  navigation.getHeight();
+                navigation.getWidth();
+                ConstraintLayout.LayoutParams linearParams =(ConstraintLayout.LayoutParams) fragmentContent.getLayoutParams();
+                linearParams.height = fragmentHeigth - navigationHeigth;
+                fragmentContent.setLayoutParams(linearParams);
+            }
+        });
+        //获取fragment的高度
+        ViewTreeObserver vtoFragment = fragmentContent.getViewTreeObserver();
+        vtoFragment.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                fragmentContent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                fragmentHeigth =  fragmentContent.getHeight();
+                fragmentContent.getWidth();
+            }
+        });
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentTagList.add("ImgFragment");
         FragmentTagList.add("VideoFragment");
@@ -86,6 +117,19 @@ public class TabMainActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_main,menu);
         return  true;
     }
+    @Override
+    public void onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(tabAdapter.getCurrentTab() == IMGFRAGMENT){

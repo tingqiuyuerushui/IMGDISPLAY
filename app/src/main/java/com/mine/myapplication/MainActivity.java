@@ -97,11 +97,11 @@ public class MainActivity extends BaseActivity {
                         }else{
                             imgListUrl.clear();
                         }
-                        totalpage = response.getListImgPageInfo().getTotalPages();
+                        totalpage = response.getResult().getTotalPages();
                         urlArray = new ArrayList<>();
-                        for (int i = 0; i < response.getListImgPageInfo().getContent().size(); i++) {
-                            imgListUrl.add(response.getListImgPageInfo().getContent().get(i));
-                            urlArray.add(response.getListImgPageInfo().getContent().get(i).getImg_url());
+                        for (int i = 0; i < response.getResult().getContent().size(); i++) {
+                            imgListUrl.add(response.getResult().getContent().get(i));
+                            urlArray.add(response.getResult().getContent().get(i).getImg_url());
                         }
                         MySharedData.sharedata_WriteInt(context,"pagenum",pagenum);
                         pagenum ++;

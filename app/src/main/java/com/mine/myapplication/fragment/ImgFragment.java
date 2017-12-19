@@ -28,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -108,11 +109,11 @@ public class ImgFragment extends BaseFragment {
                         } else {
                             imgListUrl.clear();
                         }
-                        totalpage = response.getListImgPageInfo().getTotalPages();
+                        totalpage = response.getResult().getTotalPages();
                         urlArray = new ArrayList<>();
-                        for (int i = 0; i < response.getListImgPageInfo().getContent().size(); i++) {
-                            imgListUrl.add(response.getListImgPageInfo().getContent().get(i));
-                            urlArray.add(response.getListImgPageInfo().getContent().get(i).getImg_url());
+                        for (int i = 0; i < response.getResult().getContent().size(); i++) {
+                            imgListUrl.add(response.getResult().getContent().get(i));
+                            urlArray.add(response.getResult().getContent().get(i).getImg_url());
                         }
                         MySharedData.sharedata_WriteInt(context, "pagenum", pagenum);
                         pagenum++;
@@ -133,5 +134,13 @@ public class ImgFragment extends BaseFragment {
                         }
                     }
                 });
+    }
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden ) {
+            getData(pagenum, pagesize);
+        } else {
+
+        }
     }
 }

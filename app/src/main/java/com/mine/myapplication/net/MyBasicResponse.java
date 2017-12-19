@@ -6,7 +6,7 @@ package com.mine.myapplication.net;
 
 public class MyBasicResponse<T> {
     private String status;
-    private  T listImgPageInfo;
+    private  T result;
 
     public String getStatus() {
         return status;
@@ -16,11 +16,11 @@ public class MyBasicResponse<T> {
         this.status = status;
     }
 
-    public T getListImgPageInfo() {
-        return listImgPageInfo;
+    public T getResult() {
+        return result;
     }
 
-    public void setListImgPageInfo(T listImgPageInfo) {
-        this.listImgPageInfo = listImgPageInfo;
+    public void setResult(T result) {
+        this.result = result;
     }
 }
