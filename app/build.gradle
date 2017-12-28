@@ -1,24 +1,45 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'walle'
+apply from: 'tinker-support.gradle'
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'uaes,1234'
+            storeFile file('D:/Android/demo.jks')
+            storePassword 'uaes,1234'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.mine.myapplication"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 17122612
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
-
+walle {
+    // 指定渠道包的输出路径
+    apkOutputFolder = new File("${project.buildDir}/outputs/channels");
+    // 定制渠道包的APK的文件名称
+    apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}.apk';
+    // 渠道配置文件
+    channelFile = new File("${project.getProjectDir()}/channel")
+}
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -44,8 +65,12 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation "com.trello.rxlifecycle2:rxlifecycle:$rootProject.ext.rxlifecycle"
-//compile "com.trello.rxlifecycle2:rxlifecycle-android:$rootProject.ext.rxlifecycle"
+    //compile "com.trello.rxlifecycle2:rxlifecycle-android:$rootProject.ext.rxlifecycle"
     implementation "com.trello.rxlifecycle2:rxlifecycle-components:$rootProject.ext.rxlifecycle"
     implementation 'fm.jiecao:jiecaovideoplayer:5.5.2'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.meituan.android.walle:library:1.1.5'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    implementation "com.android.support:multidex:1.0.1"
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mine.myapplication.R;
 import com.mine.myapplication.adapter.VideoListAdapter;
@@ -19,6 +20,7 @@ import com.mine.myapplication.net.DefaultObserver;
 import com.mine.myapplication.net.IdeaApi;
 import com.mine.myapplication.net.MyBasicResponse;
 import com.mine.myapplication.utils.SDUIUtil;
+import com.mine.myapplication.utils.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -86,6 +88,7 @@ public class VideoFragment extends BaseFragment {
                 .subscribe(new DefaultObserver<MyBasicResponse<VideoListEntity>>(getActivity()) {
                     @Override
                     public void onSuccess(MyBasicResponse<VideoListEntity> response) {
+                        Toast.makeText(context,"ceshi",Toast.LENGTH_SHORT).show();
                         if (videoList == null) {
                             videoList = new ArrayList<>();
                         } else {
@@ -126,11 +129,8 @@ public class VideoFragment extends BaseFragment {
         if (hidden && sensorManager != null) {
             sensorManager.unregisterListener(sensorEventListener);
             JCVideoPlayer.releaseAllVideos();
-        } else {
-            if(pagenum < totalpage){
-
+        } else if(pagenum < totalpage && getActivity() != null){
                 getData(pagenum, pagesize);
-            }
         }
     }
     public int Dp2Px(Context context, float dp) {
