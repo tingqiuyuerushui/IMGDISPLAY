@@ -88,6 +88,7 @@ public class IdeaApi {
                         .cacheControl(CacheControl.FORCE_CACHE)
                         .build();
                 LogUtils.d("Okhttp", "no network");
+
             }
 
 
